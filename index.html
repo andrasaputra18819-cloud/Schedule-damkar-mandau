@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         :root { --pagi: #fef08a; --malam: #2563eb; --libur: #ef4444; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; overflow-x: hidden; }
         .shift-pagi { background: var(--pagi)!important; color: #854d0e!important; border-bottom: 4px solid #eab308; }
         .shift-malam { background: var(--malam)!important; color: white!important; border-bottom: 4px solid #1e40af; }
         .shift-libur { background: var(--libur)!important; color: white!important; border-bottom: 4px solid #b91c1c; }
@@ -22,14 +22,13 @@
         .today { outline: 3px solid black; outline-offset: -3px; }
     </style>
 </head>
-<body class="pb-10 select-none">
+<body class="pb-10">
 
-    <!-- Header -->
     <header class="bg-slate-900 text-white p-5 pt-8 rounded-b-[2rem] shadow-lg sticky top-0 z-30">
         <div class="max-w-4xl mx-auto flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-800 tracking-tight">DAMKAR <span class="text-yellow-400">MANDAU</span></h1>
-                <p id="info-regu" class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1"></p>
+                <p id="info-regu" class="text-[10px] text-slate-400 font-bold uppercase mt-1"></p>
             </div>
             <div class="flex gap-2">
                 <button onclick="changeMonth(0, true)" class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center border border-slate-700"><i class="fa-solid fa-calendar-day text-yellow-400"></i></button>
@@ -39,14 +38,12 @@
     </header>
 
     <main class="max-w-4xl mx-auto px-4 mt-6">
-        <!-- Navigasi -->
         <div class="flex justify-between items-center mb-6 bg-white p-2 rounded-2xl border shadow-sm">
             <button onclick="changeMonth(-1)" class="w-10 h-10 text-slate-400"><i class="fa-solid fa-chevron-left"></i></button>
             <h2 id="month-title" class="text-sm font-bold text-slate-800 uppercase tracking-widest"></h2>
             <button onclick="changeMonth(1)" class="w-10 h-10 text-slate-400"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
 
-        <!-- Kalender -->
         <div class="bg-white rounded-[2rem] shadow-xl border overflow-hidden mb-6">
             <div class="calendar-grid bg-slate-50 border-b text-[10px] font-black text-slate-400 uppercase text-center py-3">
                 <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
@@ -54,15 +51,13 @@
             <div id="calendar-days" class="calendar-grid"></div>
         </div>
 
-        <!-- Legend -->
-        <div class="flex gap-3 justify-center text-[9px] font-bold">
-            <div class="px-3 py-1 bg-yellow-100 text-yellow-600 rounded-full">PAGI</div>
-            <div class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full">MALAM</div>
-            <div class="px-3 py-1 bg-red-100 text-red-600 rounded-full">LIBUR</div>
+        <div class="flex gap-3 justify-center text-[9px] font-bold uppercase">
+            <div class="px-3 py-1 bg-yellow-100 text-yellow-600 rounded-full">Pagi</div>
+            <div class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full">Malam</div>
+            <div class="px-3 py-1 bg-red-100 text-red-600 rounded-full">Libur</div>
         </div>
     </main>
 
-    <!-- Modal Settings -->
     <div id="settings-modal" class="modal fixed inset-0 flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="closeModal('settings-modal')"></div>
         <div class="bg-white w-full max-w-md rounded-[2rem] p-8 relative shadow-2xl">
@@ -75,35 +70,43 @@
                     </select>
                 </div>
                 <div>
-                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Tanggal Acuan (Regu 1 Pagi)</label>
+                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Kapan Anda Mulai PAGI Hari Ke-1?</label>
                     <input type="date" id="set-seed" class="w-full p-4 bg-slate-50 border rounded-2xl font-bold">
                 </div>
-                <button onclick="saveSettings()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-bold uppercase tracking-widest">Simpan</button>
+                <button onclick="saveSettings()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-bold uppercase tracking-widest">Simpan Jadwal</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Note -->
     <div id="note-modal" class="modal fixed inset-0 flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="closeModal('note-modal')"></div>
         <div class="bg-white w-full max-w-md rounded-[2rem] p-8 relative shadow-2xl text-center">
             <h3 id="note-date" class="text-xl font-800 mb-4 text-slate-800 uppercase"></h3>
             <div id="regu-list" class="grid grid-cols-2 gap-2 mb-6"></div>
-            <textarea id="note-text" rows="3" class="w-full p-4 bg-slate-50 border rounded-2xl font-semibold mb-4 outline-none" placeholder="Tulis catatan..."></textarea>
+            <textarea id="note-text" rows="3" class="w-full p-4 bg-slate-50 border rounded-2xl font-semibold mb-4 outline-none border-2 focus:border-yellow-400" placeholder="Tulis catatan..."></textarea>
             <button onclick="saveNote()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold uppercase tracking-widest">Simpan</button>
         </div>
     </div>
 
     <script>
         let viewDate = new Date();
-        let settings = JSON.parse(localStorage.getItem('dm_set')) || { seed: '2024-01-01', regu: 1 };
-        let notes = JSON.parse(localStorage.getItem('dm_notes')) || {};
+        let settings = JSON.parse(localStorage.getItem('dm_set_v4')) || { seed: '2024-01-01', regu: 1 };
+        let notes = JSON.parse(localStorage.getItem('dm_notes_v4')) || {};
         let activeDate = '';
 
-        function getStatus(date, regu) {
-            const diff = Math.floor((new Date(date).setHours(0,0,0,0) - new Date(settings.seed).setHours(0,0,0,0)) / 864e5);
-            let idx = (diff - (regu - 1) * 3) % 12;
+        function getStatus(date, reguTarget) {
+            const d1 = new Date(settings.seed); d1.setHours(0,0,0,0);
+            const d2 = new Date(date); d2.setHours(0,0,0,0);
+            const diff = Math.round((d2 - d1) / 864e5);
+            
+            // Logika: Jarak antar regu adalah 3 hari dalam siklus 12 hari
+            const myRegu = parseInt(settings.regu);
+            const targetRegu = parseInt(reguTarget);
+            const offset = (targetRegu - myRegu) * 3;
+            
+            let idx = (diff - offset) % 12;
             if (idx < 0) idx += 12;
+            
             if (idx < 3) return { c: 'P', l: 'Pagi', s: 'shift-pagi', b: 'b-p' };
             if (idx < 6) return { c: 'M', l: 'Malam', s: 'shift-malam', b: 'b-m' };
             return { c: 'L', l: 'Libur', s: 'shift-libur', b: 'b-l' };
@@ -125,12 +128,12 @@
             for(let d=1; d<=total; d++) {
                 const date = new Date(y, m, d).toLocaleDateString('en-CA');
                 const my = getStatus(date, settings.regu);
-                const hasNote = notes[date] ? '<div class="w-1 h-1 bg-white rounded-full mx-auto mt-1"></div>' : '';
+                const hasNote = notes[date] ? '<div class="w-1.5 h-1.5 bg-white rounded-full mx-auto mt-1 shadow-sm"></div>' : '';
                 
                 let reguGrid = '';
                 for(let r=1; r<=4; r++) {
                     const s = getStatus(date, r);
-                    reguGrid += `<div class="flex justify-between items-center px-1"><span class="text-[7px] font-bold opacity-60">R${r}</span><span class="${s.b}">${s.c}</span></div>`;
+                    reguGrid += `<div class="flex justify-between items-center px-1"><span class="text-[7px] font-bold opacity-60 uppercase">R${r}</span><span class="${s.b}">${s.c}</span></div>`;
                 }
 
                 daysCont.innerHTML += `
@@ -145,10 +148,13 @@
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
         function saveSettings() {
+            const s = document.getElementById('set-seed').value;
+            if(!s) return alert('Pilih tanggal!');
             settings.regu = document.getElementById('set-regu').value;
-            settings.seed = document.getElementById('set-seed').value;
-            localStorage.setItem('dm_set', JSON.stringify(settings));
-            location.reload();
+            settings.seed = s;
+            localStorage.setItem('dm_set_v4', JSON.stringify(settings));
+            closeModal('settings-modal');
+            render();
         }
 
         function openNote(date) {
@@ -167,7 +173,7 @@
         function saveNote() {
             const val = document.getElementById('note-text').value.trim();
             if(val) notes[activeDate] = val; else delete notes[activeDate];
-            localStorage.setItem('dm_notes', JSON.stringify(notes));
+            localStorage.setItem('dm_notes_v4', JSON.stringify(notes));
             render(); closeModal('note-modal');
         }
 
@@ -181,6 +187,4 @@
         render();
     </script>
 </body>
-</html>            
-
-        
+</html>
